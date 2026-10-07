@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Sumativa - Configuración y Soporte a Redes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0b0f19;
+            --card-bg: #151b2b;
+            --accent-cyan: #00f3ff;
+            --accent-green: #00ff88;
+            --accent-red: #ff3366;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-color: #2a3447;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- LOGIN SCREEN --- */
+        #login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            border: 1px solid var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
+            border-radius: 12px;
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+
+        .login-card h2 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2rem;
+            color: var(--accent-cyan);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .login-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background: #0f1420;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent-cyan);
+            color: #000;
+            font-weight: 700;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+
+        .btn-action:hover {
+            background: #00c8d6;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+        }
+
+        .error-msg {
+            color: var(--accent-red);
+            font-size: 0.85rem;
+            margin-top: 12px;
+            display: none;
+        }
+
+        /* --- APP MAIN HEADER (TOP BAR) --- */
+        #top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #090d16;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .brand-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .timer-badge {
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .progress-bar-container {
+            width: 180px;
+            height: 10px;
+            background: var(--border-color);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-green);
+            transition: width 0.3s;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid var(--accent-cyan);
+            background: transparent;
+            color: var(--accent-cyan);
+            transition: all 0.2s;
+        }
+
+        .btn-sm:hover {
+            background: var(--accent-cyan);
+            color: #000;
+        }
+
+        /* --- MAIN CONTAINER --- */
+        #main-content {
+            margin-top: 70px;
+            padding: 30px 20px 80px 20px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+
+        .admin-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .admin-item {
+            font-size: 0.85rem;
+        }
+
+        .admin-item span {
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .admin-item strong {
+            color: var(--accent-cyan);
+            font-size: 0.95rem;
+        }
+
+        .section-block {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.4rem;
+            color: var(--accent-cyan);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .question-card {
+            background: #0f1420;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+
+        .question-text {
+            font-size: 0.95rem;
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .option-label:hover {
+            border-color: var(--accent-cyan);
+        }
+
+        .option-label input {
+            margin-right: 12px;
+            accent-color: var(--accent-cyan);
+        }
+
+        /* MATRIX SVG STYLES */
+        .matrix-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            position: relative;
+        }
+
+        .matrix-col {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .matrix-item {
+            padding: 12px;
+            background: #0f1420;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+
+        .matrix-item.selected {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        .matrix-item.paired {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        /* ORDERING STYLES */
+        .sortable-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sortable-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #0f1420;
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .sort-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-arrow {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--accent-cyan);
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* TEXT INPUT */
+        .text-input {
+            width: 100%;
+            padding: 10px;
+            background: #0f1420;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: #fff;
+            outline: none;
+        }
+
+        .text-input:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-body {
+            background: var(--card-bg);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 8px;
+            padding: 24px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin: 20px 0;
+        }
+
+        .status-box {
+            padding: 10px;
+            text-align: center;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .status-box.answered {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+        }
+
+        .status-box.pending {
+            background: rgba(255, 51, 102, 0.2);
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+        }
+
+        /* FEEDBACK STYLES */
+        .feedback-box {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        .feedback-box.correct {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .feedback-box.incorrect {
+            background: rgba(255, 51, 102, 0.1);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+        }
+
+        /* RESULTS OVERVIEW CARD */
+        #results-summary {
+            display: none;
+            background: var(--card-bg);
+            border: 2px solid var(--accent-green);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        #results-summary h3 {
+            color: var(--accent-green);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: #0f1420;
+            padding: 14px;
+            border-radius: 6px;
+            width: 30%;
+        }
+
+        .stat-card div {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .stat-card strong {
+            font-size: 1.4rem;
+            color: var(--accent-cyan);
+        }
+
+        /* PRINT / REPORT STYLES */
+        @media print {
+            #top-bar, .btn-action, .btn-sm, #login-screen, .modal-overlay, .sort-btns {
+                display: none !important;
+            }
+
+            body {
+                background: #fff !important;
+                color: #000 !important;
+            }
+
+            #main-content {
+                margin-top: 0 !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+            }
+
+            .admin-card, .section-block, .question-card, #results-summary {
+                background: #fff !important;
+                color: #000 !important;
+                border: 1px solid #ccc !important;
+                box-shadow: none !important;
+                page-break-inside: avoid;
+            }
+
+            .admin-item strong, .section-title, .brand-title, .stat-card strong {
+                color: #000 !important;
+            }
+
+            .option-label {
+                background: #fff !important;
+                border: 1px solid #ddd !important;
+                color: #000 !important;
+            }
+
+            .feedback-box {
+                border: 1px solid #000 !important;
+                color: #000 !important;
+                background: #f0f0f0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SCREEN 1: LOGIN -->
+    <div id="login-screen">
+        <div class="login-card">
+            <h2>Acceso a Evaluación</h2>
+            <p>CTP de Santa Bárbara | Redes</p>
+            <div class="input-group">
+                <label>Correo Electrónico</label>
+                <input type="email" id="login-email" placeholder="estudiante@gmail.com">
+            </div>
+            <div class="input-group">
+                <label>Contraseña</label>
+                <input type="password" id="login-pass" placeholder="••••••••">
+            </div>
+            <button class="btn-action" onclick="autenticar()">Ingresar a la Prueba</button>
+            <div id="login-error" class="error-msg">Credenciales inválidas. Verifique sus datos.</div>
+        </div>
+    </div>
+
+    <!-- TOP BAR -->
+    <div id="top-bar" style="display: none;">
+        <div class="brand-title">CTP SANTA BÁRBARA</div>
+        <div class="timer-badge" id="timer">80:00</div>
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+        <div class="top-bar-actions">
+            <button class="btn-sm" onclick="abrirModalNavegacion()">Estado (35)</button>
+            <button class="btn-sm" style="border-color: var(--accent-green); color: var(--accent-green);" onclick="confirmarEntrega()">Entregar</button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main-content" style="display: none;">
+
+        <!-- RESUMEN DE RESULTADOS (SOLO TRAS ENTREGA) -->
+        <div id="results-summary">
+            <h3>¡Evaluación Finalizada!</h3>
+            <p id="student-display-name"></p>
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div>Puntos Obtenidos</div>
+                    <strong id="res-puntos">0 / 35</strong>
+                </div>
+                <div class="stat-card">
+                    <div>Nota Final</div>
+                    <strong id="res-nota">0 / 100</strong>
+                </div>
+                <div class="stat-card">
+                    <div>Porcentaje Obtenido</div>
+                    <strong id="res-porcentaje">0% / 25%</strong>
+                </div>
+            </div>
+            <button class="btn-action" style="max-width: 250px; margin: 10px auto 0 auto;" onclick="window.print()">Imprimir Comprobante (PDF)</button>
+        </div>
+
+        <!-- ADMINISTRATIVO -->
+        <div class="admin-card">
+            <div class="admin-item"><span>Institución:</span><strong>CTP de Santa Bárbara</strong></div>
+            <div class="admin-item"><span>Especialidad:</span><strong>Informática en Redes / Soporte</strong></div>
+            <div class="admin-item"><span>Subárea:</span><strong>Configuración y Soporte a Redes</strong></div>
+            <div class="admin-item"><span>Docente:</span><strong>Ing. Jhonathan Juárez Rivas</strong></div>
+            <div class="admin-item"><span>Estudiante:</span><strong id="lbl-estudiante">-</strong></div>
+            <div class="admin-item"><span>Puntaje / Porcentaje:</span><strong>35 Pts / 25% REA</strong></div>
+        </div>
+
+        <form id="exam-form">
+            <!-- PARTE I: SELECCIÓN ÚNICA (20 PTS) -->
+            <div class="section-block">
+                <div class="section-title">I Parte: Selección Única (20 Puntos)</div>
+                <div id="container-parte1"></div>
+            </div>
+
+            <!-- PARTE II: CORRESPONDENCIA (5 PTS) -->
+            <div class="section-block">
+                <div class="section-title">II Parte: Correspondencia (5 Puntos)</div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Seleccione un elemento de la Columna A y posteriormente su correspondiente en la Columna B para aparearlos.</p>
+                <div class="matrix-container" id="matrix-container">
+                    <div class="matrix-col" id="col-a"></div>
+                    <div class="matrix-col" id="col-b"></div>
+                </div>
+            </div>
+
+            <!-- PARTE III: RESPUESTA CORTA (5 PTS) -->
+            <div class="section-block">
+                <div class="section-title">III Parte: Respuesta Corta (5 Puntos)</div>
+                <div id="container-parte3"></div>
+            </div>
+
+            <!-- PARTE IV: ORDENAMIENTO (5 PTS) -->
+            <div class="section-block">
+                <div class="section-title">IV Parte: Ordenamiento de Procedimiento (5 Puntos)</div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Ordene cronológicamente la secuencia metodológica de diagnóstico según el Modelo OSI utilizando las flechas.</p>
+                <div class="sortable-list" id="sortable-container"></div>
+            </div>
+        </form>
+    </div>
+
+    <!-- MODAL NAVEGACION -->
+    <div class="modal-overlay" id="modal-nav">
+        <div class="modal-body">
+            <h3 style="color: var(--accent-cyan); font-family: 'Rajdhani', sans-serif;">Estado de la Prueba</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Verifique las preguntas respondidas antes de entregar.</p>
+            <div class="status-grid" id="status-grid"></div>
+            <button class="btn-action" onclick="cerrarModalNavegacion()">Cerrar Modal</button>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURACIÓN DE BACKEND
+        const SCRIPT_URL = "URL_DE_TU_GOOGLE_APPS_SCRIPT_AQUI";
+
+        // BASE DE DATOS DE ESTUDIANTES
+        const ESTUDIANTES = [
+            { email: "cascante535@gmail.com", pass: "Casa1234", nombre: "Cascante" },
+            { email: "valeriahernandezcascante@gmail.com", pass: "Casa1234", nombre: "Valeria Hernández" },
+            { email: "jerichacolomer@gmail.com", pass: "Casa1234", nombre: "Jericha Colomer" },
+            { email: "rousvillalobos0@gmail.com", pass: "Casa1234", nombre: "Rous Villalobos" },
+            { email: "rey200578@gmail.com", pass: "Casa1234", nombre: "Rey" },
+            { email: "justinbonillaaguirre054@gmail.com", pass: "Casa1234", nombre: "Justin Bonilla" },
+            { email: "arrietamaikol856@gmail.com", pass: "Casa1234", nombre: "Maikol Arrieta" }
+        ];
+
+        // DATOS DE LA PRUEBA (100% FIEL AL MATERIAL ADJUNTO)
+        const PREGUNTAS_P1 = [
+            { id: "p1_1", q: "¿Cuál es el núcleo del sistema de virtualización de infraestructura de red?", opts: ["Hipervisor / VMM", "Ancho de Banda", "Controlador SDN"], ans: 0, fb: "El Hipervisor (VMM) es el núcleo de la virtualización[cite: 16]." },
+            { id: "p1_2", q: "¿Qué tipo de Hipervisor se instala directamente sobre el hardware físico (Bare-Metal)?", opts: ["Tipo 2", "Tipo 1", "Tipo 3"], ans: 1, fb: "El Hipervisor Tipo 1 (Bare-Metal) se instala directo en el hardware[cite: 16]." },
+            { id: "p1_3", q: "¿Cuál modelo de la nube entrega recursos de cómputo, red y máquinas virtuales (ej. AWS EC2)?", opts: ["SaaS", "PaaS", "IaaS"], ans: 2, fb: "IaaS provee infraestructura básica como redes y máquinas virtuales[cite: 16]." },
+            { id: "p1_4", q: "¿Qué arquitectura separa el plano de control del plano de datos en dispositivos de red?", opts: ["SDN (Redes Definidas por Software)", "Redes Tradicionales", "OSI Layer 2"], ans: 0, fb: "SDN separa centralizadamente el plano de control del plano de datos[cite: 16]." },
+            { id: "p1_5", q: "¿Cuál interfaz en SDN conecta el controlador con los dispositivos físicos mediante OpenFlow?", opts: ["Northbound", "Southbound", "REST API"], ans: 1, fb: "La interfaz Southbound comunica el controlador con los equipos hacia el sur[cite: 17]." },
+            { id: "p1_6", q: "¿Qué interfaz conecta el Controlador SDN con aplicaciones y software de orquestación?", opts: ["Northbound", "Southbound", "Serial Port"], ans: 0, fb: "La interfaz Northbound comunica con las aplicaciones superiores[cite: 17]." },
+            { id: "p1_7", q: "Formato de datos estructurado liviano basado en pares clave-valor que usa llaves {}", opts: ["YAML", "XML", "JSON"], ans: 2, fb: "JSON utiliza llaves {} para objetos y pares clave-valor[cite: 17]." },
+            { id: "p1_8", q: "Formato de datos cuya estructura depende estrictamente de la indentación por espacios:", opts: ["YAML", "JSON", "HTML"], ans: 0, fb: "YAML depende estrictamente de la indentación por espacios[cite: 17]." },
+            { id: "p1_9", q: "En la arquitectura REST, ¿cuál método HTTP se utiliza para obtener o leer información?", opts: ["POST", "DELETE", "GET"], ans: 2, fb: "El método GET lee recursos de manera segura e idempotente[cite: 18]." },
+            { id: "p1_10", q: "¿Qué método HTTP se utiliza en REST para crear un nuevo recurso en la red?", opts: ["POST", "PUT", "PATCH"], ans: 0, fb: "POST se utiliza para crear nuevos recursos[cite: 18]." },
+            { id: "p1_11", q: "¿Qué herramienta de administración de configuración opera sin agente (Agentless) vía SSH?", opts: ["Puppet", "Ansible", "Chef"], ans: 1, fb: "Ansible es una herramienta Agentless que opera por SSH[cite: 18]." },
+            { id: "p1_12", q: "Principio ético definido como la conducta honesta, intachable y recta en el ejercicio del cargo:", opts: ["Probidad", "Respeto", "Anticorrupción"], ans: 0, fb: "La Probidad es la conducta recta e intachable en las funciones[cite: 11]." },
+            { id: "p1_13", q: "¿Qué falta ética comete un técnico al monitorear tráfico privado sin autorización?", opts: ["Violación de Probidad", "Vulneración del Respeto y Privacidad", "Falta de Inclusión"], ans: 1, fb: "Interceptar tráfico personal viola el respeto y la privacidad[cite: 11]." },
+            { id: "p1_14", q: "Aceptar dádivas para manipular accesos a la red constituye una falta de:", opts: ["Anticorrupción", "Accesibilidad", "Paciencia"], ans: 0, fb: "Aceptar sobornos destruye el principio de Anticorrupción[cite: 11]." },
+            { id: "p1_15", q: "Al comunicarse con un superior jerárquico en TI, el reporte debe caracterizarse por:", opts: ["Uso de modismos informales", "Respeto profesional y evidencia técnica", "Subjetividad"], ans: 1, fb: "El trato a superiores exige respeto formal y evidencia técnica[cite: 12]." },
+            { id: "p1_16", q: "Retener maliciosamente información de topología o IPs a los colegas constituye:", opts: ["Egoísmo técnico y falta ética gravísima", "Práctica operativa estándar", "Optimización"], ans: 0, fb: "La retención de datos es una falta grave de egoísmo técnico[cite: 12]." },
+            { id: "p1_17", q: "En la atención de soporte técnico a usuarios finales se debe mantener:", opts: ["Condescendencia", "Lenguaje accesible, empatía y paciencia", "Tecnicismos complejos"], ans: 1, fb: "El usuario debe ser atendido con empatía, paciencia y lenguaje claro[cite: 12]." },
+            { id: "p1_18", q: "Habilitar lectores de pantalla y teclados adaptativos en estaciones de trabajo responde a:", opts: ["SLA", "Accesibilidad Universal e Inclusión", "Seguridad Perimetral"], ans: 1, fb: "Corresponde al principio de accesibilidad para personas con discapacidad[cite: 13]." },
+            { id: "p1_19", q: "Inspeccionar archivos privados en servidores o realizar sniffing con Wireshark es una falta de:", opts: ["Vulneración de Confidencialidad", "Uso Fraudulento", "Negligencia"], ans: 0, fb: "Acceder a datos privados o sniffing no autorizado viola la confidencialidad[cite: 14]." },
+            { id: "p1_20", q: "Aplicar cambios en routers nucleares sin autorización ni pruebas previas se clasifica como:", opts: ["Alteración Indebida y Negligencia", "Confidencialidad", "Inclusión"], ans: 0, fb: "Modificar equipos centrales sin autorización constituye negligencia[cite: 14]." }
+        ];
+
+        const CORRESPONDENCIA = {
+            colA: [
+                { id: "a1", text: "1. Ansible" },
+                { id: "a2", text: "2. OpenFlow" },
+                { id: "a3", text: "3. Wireshark" },
+                { id: "a4", text: "4. SaaS" },
+                { id: "a5", text: "5. YAML" }
+            ],
+            colB: [
+                { id: "b1", text: "Protocolo Sur (Southbound) en SDN", match: "a2" },
+                { id: "b2", text: "Herramienta de automatización Agentless", match: "a1" },
+                { id: "b3", text: "Analizador utilizado para sniffing no autorizado", match: "a3" },
+                { id: "b4", text: "Software listo para usuario final (ej. M365)", match: "a4" },
+                { id: "b5", text: "Formato basado estrictamente en indentación", match: "a5" },
+                { id: "b6", text: "DISTRACTOR: Protocolo de enrutamiento OSPF", match: null }
+            ]
+        };
+
+        const PREGUNTAS_P3 = [
+            { id: "p3_1", q: "Nombre del formato liviano que usa pares clave-valor y corchetes para listas:", ans: "json", fb: "JSON (JavaScript Object Notation)[cite: 17]." },
+            { id: "p3_2", q: "Método HTTP para actualizar un recurso de forma parcial en arquitectura REST:", ans: "patch", fb: "PATCH realiza modificaciones parciales[cite: 18]." },
+            { id: "p3_3", q: "Conducta intachable y recta en la administración de recursos de red:", ans: "probidad", fb: "Probidad[cite: 11]." },
+            { id: "p3_4", q: "Tipo de Hipervisor que opera sobre un sistema operativo anfitrión (ej. VirtualBox):", ans: "tipo 2", fb: "Hipervisor Tipo 2 o Hospedado[cite: 16]." },
+            { id: "p3_5", q: "Herramientas de automatización basadas en cliente que requieren agente (mencione una):", ans: "puppet", ans2: "chef", fb: "Puppet o Chef[cite: 18]." }
+        ];
+
+        let ORDEN_PASOS = [
+            { id: "s1", text: "Paso 1: Identificar el problema en la Capa Física (cables, conectores)" },
+            { id: "s2", text: "Paso 2: Verificar la conectividad de enlace de datos (Capa 2)" },
+            { id: "s3", text: "Paso 3: Validar el direccionamiento IP y tablas de enrutamiento (Capa 3)" },
+            { id: "s4", text: "Paso 4: Comprobar los puertos y protocolos de transporte (Capa 4)" },
+            { id: "s5", text: "Paso 5: Probar la aplicación final y la sesión de usuario" }
+        ];
+
+        // ESTADO GLOBAL DE SESION
+        let usuarioActual = null;
+        let paresSeleccionados = {};
+        let nodoSeleccionadoA = null;
+        let tiempoRestante = 4800; // 80 minutos
+        let timerInterval = null;
+
+        // INICIALIZACIÓN
+        window.onload = function() {
+            let sesion = sessionStorage.getItem("eval_user");
+            if(sesion) {
+                usuarioActual = JSON.parse(sesion);
+                iniciarPrueba();
+            }
+        };
+
+        function autenticar() {
+            let email = document.getElementById("login-email").value.trim().toLowerCase();
+            let pass = document.getElementById("login-pass").value;
+            let user = ESTUDIANTES.find(u => u.email === email && u.pass === pass);
+
+            if(user) {
+                usuarioActual = user;
+                sessionStorage.setItem("eval_user", JSON.stringify(user));
+                document.getElementById("login-error").style.display = "none";
+                iniciarPrueba();
+            } else {
+                document.getElementById("login-error").style.display = "block";
+            }
+        }
+
+        function iniciarPrueba() {
+            document.getElementById("login-screen").style.display = "none";
+            document.getElementById("top-bar").style.display = "flex";
+            document.getElementById("main-content").style.display = "block";
+            document.getElementById("lbl-estudiante").innerText = usuarioActual.nombre + " (" + usuarioActual.email + ")";
+
+            renderizarParte1();
+            renderizarParte2();
+            renderizarParte3();
+            renderizarParte4();
+            iniciarTimer();
+            actualizarProgreso();
+        }
+
+        function iniciarTimer() {
+            timerInterval = setInterval(() => {
+                tiempoRestante--;
+                let m = Math.floor(tiempoRestante / 60);
+                let s = tiempoRestante % 60;
+                document.getElementById("timer").innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+                if(tiempoRestante <= 0) {
+                    clearInterval(timerInterval);
+                    evaluarPrueba(true);
+                }
+            }, 1000);
+        }
+
+        // RENDERIZADO
+        function renderizarParte1() {
+            let html = "";
+            PREGUNTAS_P1.forEach((p, idx) => {
+                html += `<div class="question-card" id="card-${p.id}">
+                    <div class="question-text"><strong>${idx + 1}.</strong> ${p.q}</div>
+                    <div class="options-list">`;
+                p.opts.forEach((opt, oIdx) => {
+                    html += `<label class="option-label">
+                        <input type="radio" name="${p.id}" value="${oIdx}" onchange="actualizarProgreso()">
+                        ${String.fromCharCode(65 + oIdx)}) ${opt}
+                    </label>`;
+                });
+                html += `</div><div class="feedback-box" id="fb-${p.id}"></div></div>`;
+            });
+            document.getElementById("container-parte1").innerHTML = html;
+        }
+
+        function renderizarParte2() {
+            let colAHtml = "";
+            let colBHtml = "";
+            CORRESPONDENCIA.colA.forEach(a => {
+                colAHtml += `<div class="matrix-item" id="${a.id}" onclick="seleccionarNodoA('${a.id}')">${a.text}</div>`;
+            });
+            // Mezclar Col B visualmente
+            CORRESPONDENCIA.colB.forEach(b => {
+                colBHtml += `<div class="matrix-item" id="${b.id}" onclick="seleccionarNodoB('${b.id}')">${b.text}</div>`;
+            });
+            document.getElementById("col-a").innerHTML = colAHtml;
+            document.getElementById("col-b").innerHTML = colBHtml;
+        }
+
+        function seleccionarNodoA(id) {
+            if(nodoSeleccionadoA) document.getElementById(nodoSeleccionadoA).classList.remove("selected");
+            nodoSeleccionadoA = id;
+            document.getElementById(id).classList.add("selected");
+        }
+
+        function seleccionarNodoB(idB) {
+            if(!nodoSeleccionadoA) return;
+            paresSeleccionados[nodoSeleccionadoA] = idB;
+            document.getElementById(nodoSeleccionadoA).classList.remove("selected");
+            document.getElementById(nodoSeleccionadoA).classList.add("paired");
+            document.getElementById(idB).classList.add("paired");
+            nodoSeleccionadoA = null;
+            actualizarProgreso();
+        }
+
+        function renderizarParte3() {
+            let html = "";
+            PREGUNTAS_P3.forEach((p, idx) => {
+                html += `<div class="question-card" id="card-${p.id}">
+                    <div class="question-text"><strong>${idx + 1}.</strong> ${p.q}</div>
+                    <input type="text" class="text-input" id="input-${p.id}" oninput="actualizarProgreso()">
+                    <div class="feedback-box" id="fb-${p.id}"></div>
+                </div>`;
+            });
+            document.getElementById("container-parte3").innerHTML = html;
+        }
+
+        function renderizarParte4() {
+            // Desordenar inicialmente
+            let shuffled = [...ORDEN_PASOS].sort(() => Math.random() - 0.5);
+            let html = "";
+            shuffled.forEach((item, idx) => {
+                html += `<div class="sortable-item" data-id="${item.id}">
+                    <span>${item.text}</span>
+                    <div class="sort-btns">
+                        <button type="button" class="btn-arrow" onclick="moverPaso(this, -1)">▲</button>
+                        <button type="button" class="btn-arrow" onclick="moverPaso(this, 1)">▼</button>
+                    </div>
+                </div>`;
+            });
+            document.getElementById("sortable-container").innerHTML = html;
+        }
+
+        function moverPaso(btn, dir) {
+            let item = btn.closest('.sortable-item');
+            if (dir === -1 && item.previousElementSibling) {
+                item.parentNode.insertBefore(item, item.previousElementSibling);
+            } else if (dir === 1 && item.nextElementSibling) {
+                item.parentNode.insertBefore(item.nextElementSibling, item);
+            }
+            actualizarProgreso();
+        }
+
+        function actualizarProgreso() {
+            let respondidas = 0;
+            // P1
+            PREGUNTAS_P1.forEach(p => {
+                if(document.querySelector(`input[name="${p.id}"]:checked`)) respondidas++;
+            });
+            // P2
+            respondidas += Object.keys(paresSeleccionados).length;
+            // P3
+            PREGUNTAS_P3.forEach(p => {
+                if(document.getElementById(`input-${p.id}`).value.trim() !== "") respondidas++;
+            });
+            // P4 (Siempre cuenta como respondido al interactuar)
+            respondidas += 5;
+
+            let pct = Math.min(100, Math.round((respondidas / 35) * 100));
+            document.getElementById("progress-fill").style.width = pct + "%";
+        }
+
+        function abrirModalNavegacion() {
+            let grid = document.getElementById("status-grid");
+            grid.innerHTML = "";
+            let idx = 1;
+
+            // P1
+            PREGUNTAS_P1.forEach(p => {
+                let ans = document.querySelector(`input[name="${p.id}"]:checked`);
+                grid.innerHTML += `<div class="status-box ${ans ? 'answered' : 'pending'}">${idx++}</div>`;
+            });
+            // P2
+            CORRESPONDENCIA.colA.forEach(a => {
+                grid.innerHTML += `<div class="status-box ${paresSeleccionados[a.id] ? 'answered' : 'pending'}">${idx++}</div>`;
+            });
+            // P3
+            PREGUNTAS_P3.forEach(p => {
+                let txt = document.getElementById(`input-${p.id}`).value.trim();
+                grid.innerHTML += `<div class="status-box ${txt !== '' ? 'answered' : 'pending'}">${idx++}</div>`;
+            });
+            // P4
+            for(let i=0; i<5; i++) {
+                grid.innerHTML += `<div class="status-box answered">${idx++}</div>`;
+            }
+
+            document.getElementById("modal-nav").style.display = "flex";
+        }
+
+        function cerrarModalNavegacion() {
+            document.getElementById("modal-nav").style.display = "none";
+        }
+
+        function confirmarEntrega() {
+            if(confirm("¿Está seguro de finalizar y entregar su evaluación?")) {
+                evaluarPrueba(false);
+            }
+        }
+
+        function evaluarPrueba(porTiempo) {
+            clearInterval(timerInterval);
+            let puntosP1 = 0, puntosP2 = 0, puntosP3 = 0, puntosP4 = 0;
+            let reporteRespuestas = [];
+
+            // EVALUAR P1
+            PREGUNTAS_P1.forEach((p, idx) => {
+                let sel = document.querySelector(`input[name="${p.id}"]:checked`);
+                let val = sel ? parseInt(sel.value) : -1;
+                let fb = document.getElementById(`fb-${p.id}`);
+                fb.style.display = "block";
+
+                if(val === p.ans) {
+                    puntosP1++;
+                    fb.className = "feedback-box correct";
+                    fb.innerText = "✓ Correcto";
+                    reporteRespuestas.push({ q: p.q, r: p.opts[val], c: "Correcta" });
+                } else {
+                    fb.className = "feedback-box incorrect";
+                    fb.innerText = `✗ Incorrecto. Respuesta oficial: ${p.opts[p.ans]}. (${p.fb})`;
+                    reporteRespuestas.push({ q: p.q, r: val >= 0 ? p.opts[val] : "Sin responder", c: "Incorrecta" });
+                }
+            });
+
+            // EVALUAR P2
+            CORRESPONDENCIA.colA.forEach(a => {
+                let bPairId = paresSeleccionados[a.id];
+                let bMatch = CORRESPONDENCIA.colB.find(b => b.id === bPairId);
+                if(bMatch && bMatch.match === a.id) {
+                    puntosP2++;
+                    reporteRespuestas.push({ q: a.text, r: bMatch.text, c: "Correcta" });
+                } else {
+                    reporteRespuestas.push({ q: a.text, r: bMatch ? bMatch.text : "Sin aparear", c: "Incorrecta" });
+                }
+            });
+
+            // EVALUAR P3
+            PREGUNTAS_P3.forEach(p => {
+                let input = document.getElementById(`input-${p.id}`);
+                let userVal = input.value.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                let fb = document.getElementById(`fb-${p.id}`);
+                fb.style.display = "block";
+
+                if(userVal === p.ans || (p.ans2 && userVal === p.ans2)) {
+                    puntosP3++;
+                    fb.className = "feedback-box correct";
+                    fb.innerText = "✓ Correcto";
+                    reporteRespuestas.push({ q: p.q, r: input.value, c: "Correcta" });
+                } else {
+                    fb.className = "feedback-box incorrect";
+                    fb.innerText = `✗ Incorrecto. Se esperaba: ${p.ans}. (${p.fb})`;
+                    reporteRespuestas.push({ q: p.q, r: input.value || "Sin responder", c: "Incorrecta" });
+                }
+            });
+
+            // EVALUAR P4
+            let itemsP4 = document.querySelectorAll('#sortable-container .sortable-item');
+            itemsP4.forEach((el, index) => {
+                let expectedId = ORDEN_PASOS[index].id;
+                let actualId = el.getAttribute('data-id');
+                if(expectedId === actualId) {
+                    puntosP4++;
+                    reporteRespuestas.push({ q: `Paso ${index+1}`, r: el.querySelector('span').innerText, c: "Correcta" });
+                } else {
+                    reporteRespuestas.push({ q: `Paso ${index+1}`, r: el.querySelector('span').innerText, c: "Incorrecta" });
+                }
+            });
+
+            let totalPuntos = puntosP1 + puntosP2 + puntosP3 + puntosP4;
+            let nota100 = Math.round((totalPuntos / 35) * 100);
+            let porcentaje25 = ((totalPuntos / 35) * 25).toFixed(2);
+
+            // DESPLEGAR RESULTADOS EN PANTALLA
+            document.getElementById("results-summary").style.display = "block";
+            document.getElementById("student-display-name").innerText = `Estudiante: ${usuarioActual.nombre}`;
+            document.getElementById("res-puntos").innerText = `${totalPuntos} / 35`;
+            document.getElementById("res-nota").innerText = `${nota100} / 100`;
+            document.getElementById("res-porcentaje").innerText = `${porcentaje25}% / 25%`;
+
+            // DESHABILITAR EDICIÓN
+            document.querySelectorAll('input, button:not(.btn-action)').forEach(el => el.disabled = true);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // ENVIAR POR FETCH AL BACKEND
+            enviarResultadosBackend(totalPuntos, nota100, porcentaje25, reporteRespuestas);
+        }
+
+        function enviarResultadosBackend(puntos, nota, pct, respuestas) {
+            let payload = {
+                estudiante: usuarioActual.nombre,
+                email: usuarioActual.email,
+                puntos: puntos,
+                nota: nota,
+                porcentaje: pct,
+                respuestas: respuestas
+            };
+
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                console.log("Resultados enviados exitosamente.");
+            }).catch(err => {
+                console.error("Error al enviar a Apps Script:", err);
+            });
+        }
+    </script>
+</body>
+</html>
